@@ -25,6 +25,9 @@ class View
                     <label for="name">Name :</label>
                     <input id="name" type="text">
                     <br>
+                    <label for="breed">Breed :</label>
+                    <select id="breed"></select>
+                    <br>
                     <label for="font">Font :</label>
                     <select id="font">
                         <option value="Times New Roman">Times New Roman </option>
@@ -105,6 +108,7 @@ class View
 
         insertDog.querySelector('#edit-ok').addEventListener('click', () => {
             const value = document.getElementById('name').value
+            debugger
             if (value == '')
             {
                 alert(document.getElementById("edit-error-name-empty").innerText)
@@ -114,7 +118,7 @@ class View
             document.getElementById('edit').classList.add('hidden')
             document.getElementById('main').classList.remove('hidden')
 
-            this.dogsInsert('terrier', document.getElementById('name').value, [10,10], { name : 'Arial',  size : '10px' })
+            this.dogsInsert(document.getElementById('breed').value, document.getElementById('name').value, [10,10], { name : 'Arial',  size : '10px' })
         })
         
         insertDog.querySelector('#edit-cancel').addEventListener('click', () => {
@@ -127,6 +131,23 @@ class View
         })
     }
 
+
+    setBreeds(breeds)
+    {
+        const breedsSelector = document.getElementById('breed')
+        while (breedsSelector.hasChildNodes()) 
+        {
+            breedsSelector.removeChild(breedsSelector.lastChild);
+        }
+
+        for(let breed of breeds)
+        {
+            let breedOption = document.createElement('option')
+            breedOption.value = breed
+            breedOption.innerText = breed
+            breedsSelector.appendChild(breedOption)
+        }
+    }
 
     dogEdit(adog)
     {
@@ -142,7 +163,7 @@ class View
 
     dogsInsert(breed, name, position, font, color = 'white')
     {
-        application.controller.dispatchEvent(new CustomEvent('view-dog-insert', { 
+        application.controller.dispatchEvent(new CustomEvent('view-dogs-insert', { 
             bubbles : false, 
             detail  : { 
                 name     : name,

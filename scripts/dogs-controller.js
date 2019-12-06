@@ -44,8 +44,37 @@ class Controller extends EventTarget
     }
 
 
-    run()
+    async run()
     {
         this.model.dogsList()
+
+        try
+        {
+            const response = await fetch('https://dog.ceo/api/breeds/list/all')
+            const breeds   = await response.json()
+            if ( (!breeds.status) || (breeds.status != 'success') )
+                throw new Error('Unexpected status')
+
+            const plainBreeds = []
+            for(let family in breeds.message)
+            {
+                if (breeds.message[family].length == 0)
+                {
+                    plainBreeds.push(family)
+                    continue
+                }
+                
+                for(let subbreed of breeds.message[family])
+                {
+                    plainBreeds.push(subbreed + ' ' + family)
+                }
+            }
+
+            this.view.setBreeds(plainBreeds) 
+        }
+        catch (e)
+        {
+            console.log('Error :', e.message, )
+        }
     }
 }
