@@ -60,6 +60,38 @@ class Controller extends EventTarget
         this.addEventListener('model-dogs-update', _private.modelDogsUpdate )
         this.addEventListener('view-dogs-clear',   _private.viewDogsClear   )
         this.addEventListener('view-breed-images', _private.viewBreedImages )
+
+        fetch = null
+        if (fetch)
+            return
+            
+        const http = new XMLHttpRequest
+        http.addEventListener('readystatechange', () => {
+            alert("No fetch treating")
+            if (http.readyState == 4)
+            {
+                debugger
+                if (http.status != 200)
+                {
+                    return
+                } 
+    
+                if ( !http.getResponseHeader('Content-type').includes('text/javascript') )
+                {
+                    return
+                }
+
+                if ( http.responseText.includes('/* No polyfills found for current settings */'))
+                {
+                    alert('No polyfill for fecth')
+                    return
+                }
+
+                eval(http.responseText)
+            }
+        })
+        http.open("GET", "https://polyfill.io/v3/polyfill.js?features=fetch", true)
+        http.send()
     }
 
 
