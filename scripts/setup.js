@@ -138,10 +138,11 @@
     {
         console.log('Load time :', (new Date()).toLocaleTimeString())
 
+        alert('EventTarget : ' + (!EventTarget))
         if (!EventTarget)
         {
             alert('will import EventTarget object')
-            importLibrary('https://unpkg.com/event-target@1.2.3/min.js')
+            await importLibrary('https://unpkg.com/event-target@1.2.3/min.js')
         }
 
 
