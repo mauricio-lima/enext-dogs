@@ -38,8 +38,49 @@
         })
     }
 
+    /*
+    async function importLibraryOld(url)
+    {
+        await new Promise( (resolve, reject) => {
+            const http = new XMLHttpRequest
+            http.addEventListener('readystatechange', () => {
+                if (http.readyState == 4)
+                {
+                        alert("No fetch treating")
+                        debugger
+                        if (http.status != 200)
+                        {
+                            reject(new Error('Unexpected Status code'))
+                            return
+                        } 
+            
+                        if ( !http.getResponseHeader('Content-type').includes('text/javascript') )
+                        {
+                            return
+                        }
+        
+                        if ( http.responseText.includes('/* No polyfills found for current settings '))
+                        {
+                            alert('No polyfill for fecth')
+                            reject()
+                            return
+                        }
+        
+                        eval(http.responseText)
+                        resolve()
+                }
+            })
+            //http.open("GET", "https://polyfill.io/v3/polyfill.js?features=fetch", true)
+            //http.open("GET", "https://github.com/github/fetch/raw/master/fetch.js", true)
+            //http.open("GET", "scripts/fetch.js", true)
+            http.open("GET", url, true)
+            http.send()
+        })
+    }
+    */
 
-    async function scriptImport(url)
+
+    async function importScript(url)
     {
         return new Promise( (resolve, reject ) => {
             let head
@@ -63,6 +104,20 @@
     }
 
 
+    async function importLibrary(url)
+    {
+        try
+        {
+            const content = await requestContent(url)
+            eval(content.data)
+        }
+        catch
+        {
+            alert('Import Libray Error')
+        }
+    }
+
+
     async function configurationLoad(script, name, errorHandler = true)
     {
         if (!script)
@@ -75,7 +130,7 @@
             throw new Error(`Missing ${name} configuration`)
         } 
             
-        await scriptImport('scripts/' + script)
+        await importScript('scripts/' + script)
     }
 
 
@@ -83,7 +138,12 @@
     {
         console.log('Load time :', (new Date()).toLocaleTimeString())
 
-        //window.EventTarget = EventTarget || Element
+        if (!EventTarget)
+        {
+            alert('will import EventTarget object')
+            importLibrary('https://unpkg.com/event-target@1.2.3/min.js')
+        }
+
 
         urlParametersParser()
         configurationFile = parameters('config') || parameters('configuration') || 'config.json'
@@ -115,6 +175,5 @@
         }
     }
 
-    alert('setup')
     setup()
 })()

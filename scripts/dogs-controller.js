@@ -69,50 +69,6 @@ class Controller extends EventTarget
 
         try
         {
-            /*
-            await new Promise( (resolve, reject) => {
-                fetch = null
-                if (fetch)
-                {
-                    resolve()
-                    return
-                }
-
-                const http = new XMLHttpRequest
-                http.addEventListener('readystatechange', () => {
-                    if (http.readyState == 4)
-                    {
-                        alert("No fetch treating")
-                        debugger
-                        if (http.status != 200)
-                        {
-                            reject(new Error('Unexpected Status code'))
-                            return
-                        } 
-            
-                        if ( !http.getResponseHeader('Content-type').includes('text/javascript') )
-                        {
-                            return
-                        }
-        
-                        if ( http.responseText.includes('/* No polyfills found for current settings '))
-                        {
-                            alert('No polyfill for fecth')
-                            reject()
-                            return
-                        }
-        
-                        eval(http.responseText)
-                        resolve()
-                    }
-                })
-                http.open("GET", "https://polyfill.io/v3/polyfill.js?features=fetch", true)
-                //http.open("GET", "https://github.com/github/fetch/raw/master/fetch.js", true)
-                //http.open("GET", "scripts/fetch.js", true)
-                http.send()
-            })
-            */
-
             const response = await fetch('https://dog.ceo/api/breeds/list/all')
             const breeds   = await response.json()
             if ( (!breeds.status) || (breeds.status != 'success') )
