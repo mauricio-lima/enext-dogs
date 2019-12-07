@@ -83,6 +83,8 @@
     {
         console.log('Load time :', (new Date()).toLocaleTimeString())
 
+        window.EventTarget = EventTarget || Element
+        
         urlParametersParser()
         configurationFile = parameters('config') || parameters('configuration') || 'config.json'
 
