@@ -109,7 +109,7 @@
         try
         {
             const content = await requestContent(url)
-            eval(content.data)
+            await eval('(async () => {' + content.data + '})()') 
         }
         catch
         {
@@ -138,14 +138,12 @@
     {
         console.log('Load time :', (new Date()).toLocaleTimeString())
 
-        //alert('EventTarget : ' + (!EventTarget))
-        //if (!EventTarget)
-        //{
-            alert('will import EventTarget object')
-            await importScript('https://unpkg.com/event-target@1.2.3/min.js')
-            alert('loaded')
-        //}
-
+        EventTarget = null
+        await importScript('https://unpkg.com/event-target@1.2.3/min.js')
+        //await importLibrary('https://unpkg.com/event-target@1.2.3/min.js')
+        //await new Promise( (resolve) => setTimeout(resolve,3000) )
+        //alert (!!EventTarget)
+        //debugger
 
         urlParametersParser()
         configurationFile = parameters('config') || parameters('configuration') || 'config.json'
@@ -173,7 +171,7 @@
         catch (error)
         {
             console.error(error.message)
-            alert('error : ' + error.message)
+            //alert('error : ' + error.message)
         }
     }
 

@@ -10,7 +10,6 @@ class Controller extends EventTarget
         this.private = {
 
             viewDogsInsert  : event => {
-                    alert('dog named ' + event.detail.name + ' inserted')
                     model.dogInsert(event.detail)
                 },
 

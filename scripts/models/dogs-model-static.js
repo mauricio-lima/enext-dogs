@@ -46,7 +46,6 @@ class Model
 
     dogsClear()
     {
-        alert('Model Dogs Clear')
         this.list = []
         application.controller.dispatchEvent(new CustomEvent('model-dogs-update', {
             bubbles : false, 
@@ -72,9 +71,6 @@ class Model
 
     dogInsert(adog)
     {
-        alert('model dog insert')
-
-
         this.list.push({
             id : this.nextID,
             ...adog

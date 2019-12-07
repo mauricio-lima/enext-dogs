@@ -115,13 +115,10 @@ class View
 
         insertDog.querySelector('#dogInsert').addEventListener('click', () => {
             this.dogEdit()
-
-            //
         })
 
         insertDog.querySelector('#edit-ok').addEventListener('click', () => {
             const value = document.getElementById('name').value
-            debugger
             if (value == '')
             {
                 alert(document.getElementById("edit-error-name-empty").innerText)
@@ -303,7 +300,6 @@ class View
     {
         let columns
 
-        alert('view receives dogs update')
         const dogsTable = document.querySelector('#dogs tbody')
         const dogRows = dogsTable.querySelectorAll('tr.dog')
 
