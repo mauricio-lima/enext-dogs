@@ -67,9 +67,9 @@ class Controller extends EventTarget
             
         const http = new XMLHttpRequest
         http.addEventListener('readystatechange', () => {
-            alert("No fetch treating")
             if (http.readyState == 4)
             {
+                alert("No fetch treating")
                 debugger
                 if (http.status != 200)
                 {
