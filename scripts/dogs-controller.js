@@ -30,6 +30,24 @@ class Controller extends EventTarget
                     model.dogsClear();
                 },
 
+            viewBreedImages : async (event) => {
+                    try
+                    {
+                        const url = 'https://dog.ceo/api/breed/' + event.detail.breed + '/images'
+
+                        const response = await fetch(url)
+                        const urls     = await response.json()
+                        if ( (!urls.status) || (urls.status != 'success') )
+                            throw new Error(urls.message)
+
+                        this.view.setBreedImageList(urls.message)
+                    }
+                    catch (e)
+                    {
+                        console.log(e.message)
+                    }
+                },
+
             modelDogsUpdate : event => {
                     view.dogsUpdate(event.detail.updates)
                 }
@@ -41,6 +59,7 @@ class Controller extends EventTarget
         this.addEventListener('view-dog-edit',     _private.viewDogEdit     )
         this.addEventListener('model-dogs-update', _private.modelDogsUpdate )
         this.addEventListener('view-dogs-clear',   _private.viewDogsClear   )
+        this.addEventListener('view-breed-images', _private.viewBreedImages )
     }
 
 

@@ -39,6 +39,19 @@ class View
                     <br>
                     <label for="color">Color :</label>
                     <input id="color"  type="color" value="#ff0000">
+                    <div id="breed-image-section"  class="hidden">
+                        <br>
+                        <br>
+                        <canvas id="breed-image"></canvas>
+                        <div>
+                            <button id="breed-image-previous">
+                                previous
+                            </button>
+                            <button id="breed-image-next">
+                                next
+                            </button>
+                        </div>
+                    </div>
                     <br>
                     <br>
                     <button id="edit-ok"     >
@@ -126,6 +139,25 @@ class View
             document.getElementById('main').classList.remove('hidden')
         })
 
+        insertDog.querySelector('#breed').addEventListener('change', (event) => {
+            application.controller.dispatchEvent(new CustomEvent('view-breed-images', { 
+                bubbles : false, 
+                detail  : { 
+                    breed : event.target.value
+                }
+            }))
+        })
+
+        insertDog.querySelector('#breed-image-previous').addEventListener('click', () => {
+            this.breedImages.selected--
+            this.breedImages.show()
+        })
+
+        insertDog.querySelector('#breed-image-next').addEventListener('click', () => {
+            this.breedImages.selected++
+            this.breedImages.show()
+        })
+
         insertDog.querySelector('#dogsClear').addEventListener('click', () => {
             application.controller.dispatchEvent(new CustomEvent('view-dogs-clear'))
         })
@@ -148,6 +180,56 @@ class View
             breedsSelector.appendChild(breedOption)
         }
     }
+
+
+    setBreedImageList(urls)
+    {
+        this.breedImages = {
+            selected : null,
+            images   : urls.map( (item) => {
+                return {
+                    url   : item,
+                    image : null
+                }
+            }),
+
+            show     : async () => {
+                const self = this.breedImages
+
+                if (!self.selected)
+                    self.selected = 1
+                
+                if (self.selected > self.images.length)
+                    self.selected = self.images.length
+
+                if (self.selected < 1)
+                    self.selected = 1
+
+                const selectedImage = self.images[self.selected - 1]
+                if (!selectedImage.image)
+                {
+                    selectedImage.image  = new Image()
+                    //selectedImage.url = selectedImage.url  //.replace('https', 'http')
+                    await new Promise ( (resolve) => {
+                        selectedImage.image.onload = resolve
+                        selectedImage.image.src = selectedImage.url    
+                    })
+                }
+                
+                const canvas = document.getElementById('breed-image')
+                canvas.height = 200
+                canvas.width  = canvas.height / selectedImage.image.height * selectedImage.image.width
+                canvas.getContext('2d').drawImage(selectedImage.image, 0, 0, canvas.width, canvas.height)
+            }
+        }
+
+        if (this.breedImages.images.length == 0)
+            return
+
+        document.getElementById('breed-image-section').classList.remove('hidden')
+        this.breedImages.show()
+    }
+
 
     dogEdit(adog)
     {
@@ -188,7 +270,6 @@ class View
     {
         const dogsTable = document.querySelector('#dogs tbody')
         const dogRows = dogsTable.querySelectorAll('tr.dog')
-        
     }
 
 
