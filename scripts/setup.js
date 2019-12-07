@@ -138,12 +138,13 @@
     {
         console.log('Load time :', (new Date()).toLocaleTimeString())
 
-        alert('EventTarget : ' + (!EventTarget))
-        if (!EventTarget)
-        {
+        //alert('EventTarget : ' + (!EventTarget))
+        //if (!EventTarget)
+        //{
             alert('will import EventTarget object')
             await importLibrary('https://unpkg.com/event-target@1.2.3/min.js')
-        }
+            alert('loaded')
+        //}
 
 
         urlParametersParser()
