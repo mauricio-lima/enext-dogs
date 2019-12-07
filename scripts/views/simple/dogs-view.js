@@ -158,6 +158,22 @@ class View
             this.breedImages.show()
         })
 
+        insertDog.querySelector('#name').addEventListener('keyup', () => {
+            this.breedImages.show()
+        })
+
+        insertDog.querySelector('#font').addEventListener('change', () => {
+            this.breedImages.show()
+        })
+
+        insertDog.querySelector('#size').addEventListener('keyup', () => {
+            this.breedImages.show()
+        })
+
+        insertDog.querySelector('#color').addEventListener('change', () => {
+            this.breedImages.show()
+        })
+
         insertDog.querySelector('#dogsClear').addEventListener('click', () => {
             application.controller.dispatchEvent(new CustomEvent('view-dogs-clear'))
         })
@@ -215,11 +231,21 @@ class View
                         selectedImage.image.src = selectedImage.url    
                     })
                 }
-                
+
                 const canvas = document.getElementById('breed-image')
                 canvas.height = 200
                 canvas.width  = canvas.height / selectedImage.image.height * selectedImage.image.width
-                canvas.getContext('2d').drawImage(selectedImage.image, 0, 0, canvas.width, canvas.height)
+                
+                const context = canvas.getContext('2d')
+                context.drawImage(selectedImage.image, 0, 0, canvas.width, canvas.height)
+
+                const name = document.getElementById('name').value
+                if (name == '')
+                    return
+
+                context.font = document.getElementById('size').value + 'px ' + document.getElementById('font').value
+                context.fillStyle = document.getElementById('color').value
+                context.fillText(name, 40, 40)
             }
         }
 
