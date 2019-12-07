@@ -109,8 +109,10 @@
         catch (error)
         {
             console.error(error.message)
+            alert('error : ' + error.message)
         }
     }
 
+    alert('setup')
     setup()
 })()
