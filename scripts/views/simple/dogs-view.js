@@ -38,7 +38,15 @@ class View
                     <input id="size"  type="number" value="7"  min="7"  max="40">
                     <br>
                     <label for="color">Color :</label>
-                    <input id="color"  type="color" value="#ff0000">
+                    <select id="color">
+                        <option value="#ffffff">White   </option>
+                        <option value="#ff0000">Red     </option>
+                        <option value="#ffff00">Amarelo </option>
+                        <option value="#00ff00">Verde   </option>
+                        <option value="#00ffff">Ciano   </option>
+                        <option value="#0000ff">Blue    </option>
+                        <option value="#000000">Black   </option>
+                    </select>
                     <div id="breed-image-section"  class="hidden">
                         <br>
                         <br>
