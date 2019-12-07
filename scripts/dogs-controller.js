@@ -69,6 +69,7 @@ class Controller extends EventTarget
 
         try
         {
+            /*
             await new Promise( (resolve, reject) => {
                 fetch = null
                 if (fetch)
@@ -89,14 +90,12 @@ class Controller extends EventTarget
                             return
                         } 
             
-                        /*
                         if ( !http.getResponseHeader('Content-type').includes('text/javascript') )
                         {
                             return
                         }
-                        */
         
-                        if ( http.responseText.includes('/* No polyfills found for current settings */'))
+                        if ( http.responseText.includes('/* No polyfills found for current settings '))
                         {
                             alert('No polyfill for fecth')
                             reject()
@@ -107,11 +106,12 @@ class Controller extends EventTarget
                         resolve()
                     }
                 })
-                //http.open("GET", "https://polyfill.io/v3/polyfill.js?features=fetch", true)
+                http.open("GET", "https://polyfill.io/v3/polyfill.js?features=fetch", true)
                 //http.open("GET", "https://github.com/github/fetch/raw/master/fetch.js", true)
-                http.open("GET", "scripts/fetch.js", true)
+                //http.open("GET", "scripts/fetch.js", true)
                 http.send()
-            })    
+            })
+            */
 
             const response = await fetch('https://dog.ceo/api/breeds/list/all')
             const breeds   = await response.json()
