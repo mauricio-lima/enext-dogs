@@ -1,0 +1,5 @@
+{
+    "model"      : "models/dogs-model-static.js",
+    "view"       : "views/simple/dogs-view.js",
+    "controller" : "dogs-controller.js"
+}
