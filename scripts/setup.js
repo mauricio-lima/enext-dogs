@@ -166,7 +166,7 @@
                 controller : new Controller(view, model)
             } 
 
-            application.controller.run()
+            //application.controller.run()
         }
         catch (error)
         {

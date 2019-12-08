@@ -9,27 +9,27 @@ class Controller extends EventTarget
 
         this.private = {
 
-            viewDogsInsert  : event => {
+            viewDogsInsert   : event => {
                     model.dogsInsert(event.detail)
                 },
 
-            viewDogEdit     : event => {
-                    const result = model.dogsRetrieve(event.detail).pop()
+            retrieveDogsData : event => {
+                    const result = model.dogsRetrieve(event.detail.keys)
                     if (result)
                     {
-                        view.dogEdit(result)
+                        event.detail.callback.bind(this.view)(result)
                     }
                 },
 
-            viewDogsDelete : event => {
+            viewDogsDelete   : event => {
                     model.dogsDelete(event.detail)
                 },
 
-            viewDogsClear   : event => {
+            viewDogsClear    : event => {
                     model.dogsClear();
                 },
 
-            viewBreedImages : async (event) => {
+            viewBreedImages  : async (event) => {
                     try
                     {
                         const path = event.detail.breed.split(' ').reverse().join('/')
@@ -54,19 +54,22 @@ class Controller extends EventTarget
         }
 
         const _private = this.private
-        this.addEventListener('view-dogs-insert',  _private.viewDogsInsert  )
-        this.addEventListener('view-dogs-delete',  _private.viewDogsDelete  )
-        this.addEventListener('view-dog-edit',     _private.viewDogEdit     )
-        this.addEventListener('model-dogs-update', _private.modelDogsUpdate )
-        this.addEventListener('view-dogs-clear',   _private.viewDogsClear   )
-        this.addEventListener('view-breed-images', _private.viewBreedImages )
+        this.addEventListener('view-dogs-insert',    _private.viewDogsInsert   )
+        this.addEventListener('view-dogs-delete',    _private.viewDogsDelete   )
+        this.addEventListener('model-dogs-update',   _private.modelDogsUpdate  )
+        this.addEventListener('view-dogs-clear',     _private.viewDogsClear    )
+        this.addEventListener('view-breed-images',   _private.viewBreedImages  )
+        this.addEventListener('retrieve-dogs-data',  _private.retrieveDogsData )
     }
 
 
     async run()
     {
+        this.view.initialize()
         this.model.dogsList()
 
+        //return // remover para avançar
+        
         try
         {
             const response = await fetch('https://dog.ceo/api/breeds/list/all')
