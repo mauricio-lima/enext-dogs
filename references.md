@@ -1,15 +1,36 @@
 ## References
 
+
+Creating and triggering events
+https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Creating_and_triggering_events
+
+
 HTML canvas drawImage() Method
 https://www.w3schools.com/tags/canvas_drawimage.asp
+
+
+Drawing text
+https://developer.mozilla.org/pt-BR/docs/Web/Guide/HTML/Canvas_tutorial/Drawing_text
+
+
+HTML canvas fillStyle Property
+https://www.w3schools.com/tags/canvas_fillstyle.asp
 
 
 default select option as blank
 https://stackoverflow.com/questions/8605516/default-select-option-as-blank
 
 
+Remove all the children DOM elements in div
+https://stackoverflow.com/questions/683366/remove-all-the-children-dom-elements-in-div
+
+
 Array.prototype.reverse()
 https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Global_Objects/Array/reverse
+
+
+Javascript ES6/ES5 find in array and change
+https://stackoverflow.com/questions/35206125/javascript-es6-es5-find-in-array-and-change
 
 
 How can I clear cache in Safari on my iOS device?
