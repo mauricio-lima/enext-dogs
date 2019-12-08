@@ -22,6 +22,8 @@ class View
         const insertDog = document.createElement('div')
         insertDog.innerHTML = `
                 <div id="edit" class="hidden">
+                    <input id="id"   type="hidden">
+                    <input id="url"  type="hidden">
                     <label for="name">Name :</label>
                     <input id="name" type="text">
                     <br>
@@ -35,7 +37,7 @@ class View
                     </select>
                     <br>
                     <label for="size">Size :</label>
-                    <input id="size"  type="number" value="7"  min="7"  max="40">
+                    <input id="size"  type="number" value="40"  min="7"  max="40">
                     <br>
                     <label for="color">Color :</label>
                     <select id="color">
@@ -90,7 +92,6 @@ class View
                                 <th>Color   </th>
                                 <th>        </th>
                                 <th>Picture </th>
-                                <th>Status  </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -110,7 +111,6 @@ class View
                                     </button>
                                 </td>
                                 <td> picture </td>
-                                <td> N       </td>
                             </tr>
                         </tbody>
                     </table>
@@ -136,7 +136,35 @@ class View
             document.getElementById('edit').classList.add('hidden')
             document.getElementById('main').classList.remove('hidden')
 
-            this.dogsInsert(document.getElementById('breed').value, document.getElementById('name').value, [10,10], { name : 'Arial',  size : '10px' })
+            //this.dogsInsert(breed, name, font, color, [10,10], this.breedImages.images[this.breedImages.selected - 1].url)
+            if (this.breedImages.selected)
+            {
+                document.getElementById('url'  ).value = this.breedImages.images[this.breedImages.selected - 1].url
+            }
+
+            let adog = {
+                breed    : document.getElementById('breed').value,
+                name     : document.getElementById('name' ).value,
+                picture  : document.getElementById('url'  ).value,
+                //picture  : this.breedImages.images[this.breedImages.selected - 1],
+                subtitle : {
+                    color : document.getElementById('color').value,
+                    font  : {
+                        name : document.getElementById('font').value,
+                        size : parseInt(document.getElementById('size').value)
+                    }
+                }
+            }
+            
+            const id = document.getElementById('id').value
+            if (id)
+            {
+                adog = {
+                    id : parseInt(id),
+                    ...adog
+                }
+            }
+            this.dogsInsert(adog)
         })
         
         insertDog.querySelector('#edit-cancel').addEventListener('click', () => {
@@ -145,12 +173,7 @@ class View
         })
 
         insertDog.querySelector('#breed').addEventListener('change', (event) => {
-            application.controller.dispatchEvent(new CustomEvent('view-breed-images', { 
-                bubbles : false, 
-                detail  : { 
-                    breed : event.target.value
-                }
-            }))
+            this.requestBreedImages(event.target.value)
         })
 
         insertDog.querySelector('#breed-image-previous').addEventListener('click', () => {
@@ -185,6 +208,36 @@ class View
     }
 
 
+    requestBreedImages(breed)
+    {
+        application.controller.dispatchEvent(new CustomEvent('view-breed-images', { 
+            bubbles : false, 
+            detail  : { 
+                breed : breed
+            }
+        }))
+    }
+
+
+    drawImage(image)
+    {
+        const canvas = document.getElementById('breed-image')
+        canvas.height = 200
+        canvas.width  = canvas.height / image.height * image.width
+        
+        const context = canvas.getContext('2d')
+        context.drawImage(image, 0, 0, canvas.width, canvas.height)
+
+        const name = document.getElementById('name').value
+        if (name == '')
+            return
+
+        context.font = document.getElementById('size').value + 'px ' + document.getElementById('font').value
+        context.fillStyle = document.getElementById('color').value
+        context.fillText(name, 40, 40)
+    }
+
+
     setBreeds(breeds)
     {
         const breedsSelector = document.getElementById('breed')
@@ -193,9 +246,16 @@ class View
             breedsSelector.removeChild(breedsSelector.lastChild);
         }
 
+        let breedOption = document.createElement('option')
+        breedOption.disabled  = true
+        breedOption.selected  = true
+        breedOption.value     = ''
+        breedOption.innerText = '-- select an option --'
+        breedsSelector.appendChild(breedOption)
+
         for(let breed of breeds)
         {
-            let breedOption = document.createElement('option')
+            breedOption = document.createElement('option')
             breedOption.value = breed
             breedOption.innerText = breed
             breedsSelector.appendChild(breedOption)
@@ -217,6 +277,17 @@ class View
             show     : async () => {
                 const self = this.breedImages
 
+                const currentURL = document.getElementById('url').value
+                if (currentURL)
+                {
+                    self.selected = self.images.findIndex( item => self.images.url == currentURL )
+                    if ( !isNaN(self.selected ))
+                    {
+                        self.selected++
+                        return
+                    }
+                }
+
                 if (!self.selected)
                     self.selected = 1
                 
@@ -237,20 +308,7 @@ class View
                     })
                 }
 
-                const canvas = document.getElementById('breed-image')
-                canvas.height = 200
-                canvas.width  = canvas.height / selectedImage.image.height * selectedImage.image.width
-                
-                const context = canvas.getContext('2d')
-                context.drawImage(selectedImage.image, 0, 0, canvas.width, canvas.height)
-
-                const name = document.getElementById('name').value
-                if (name == '')
-                    return
-
-                context.font = document.getElementById('size').value + 'px ' + document.getElementById('font').value
-                context.fillStyle = document.getElementById('color').value
-                context.fillText(name, 40, 40)
+                this.drawImage(selectedImage.image)
             }
         }
 
@@ -262,37 +320,77 @@ class View
     }
 
 
-    dogEdit(adog)
+    async dogEdit(adog)
     {
+        let id
+        let name
+        let breed
+        let font
+        let size
+        let color
+        let pictureURL
+
         document.getElementById('edit').classList.remove('hidden')
         document.getElementById('main').classList.add('hidden')
 
-        if (!adog)
-            return
+        id    = ''
+        name  = ''
+        breed = ''
+        font  = ''
+        size  =  47
+        color = '#000000'
+        pictureURL = ''
 
-        document.getElementById('name').value = adog.name
+        if (adog)
+        {
+              id       = adog.id
+            name       = adog.name
+            breed      = adog.breed
+            font       = adog.subtitle.font.name
+            size       = adog.subtitle.font.size
+            color      = adog.subtitle.color
+            pictureURL = adog.picture
+        }
+
+        document.getElementById('id'  ).value = id
+        document.getElementById('url' ).value = pictureURL
+        document.getElementById('name').value = name
+
+        const optionsBreed = document.querySelectorAll('#breed option[value=\'' + breed + '\']')
+        if (optionsBreed.length > 0)
+        {
+            optionsBreed[0].selected = true
+            this.requestBreedImages(breed)
+        }
+
+        document.getElementById('size').value = size 
+        
+        const optionsColor = document.querySelectorAll('#color option[value=\'' + color + '\']')
+        if (optionsColor.length > 0)
+        {
+            optionsColor[0].selected = true
+        }
+
+        if (!pictureURL)
+        {
+            document.getElementById('breed-image-section').classList.add('hidden')
+            return
+        }
+
+        const selectedImage = new Image()
+        await new Promise ( (resolve) => {
+            selectedImage.onload = resolve
+            selectedImage.src = pictureURL
+        })
+        this.drawImage(selectedImage)
     }
 
 
-    dogsInsert(breed, name, position, font, color = 'white')
+    dogsInsert(adog)
     {
         application.controller.dispatchEvent(new CustomEvent('view-dogs-insert', { 
             bubbles : false, 
-            detail  : { 
-                name     : name,
-                breed	 : breed,
-                subtitle : {
-                    color    : color,
-                    position : {
-                        horizontal  : position[0],
-                        vertical    : position[1]
-                    },
-                    font     : {
-                        name : font.name,
-                        size : font.size
-                    }
-                }
-            } 
+            detail  : adog
         }))
     }
 
@@ -337,7 +435,6 @@ class View
 
                 if (!item)
                 {
-                    columns[8].innerText = 'D'
                     dogsTable.removeChild(row)
                     return
                 }
@@ -347,6 +444,7 @@ class View
                 updateColumn(3, item.subtitle.font.name)
                 updateColumn(4, item.subtitle.font.size)
                 updateColumn(5, item.subtitle.color)
+                updateColumn(7, item.picture)
 
                 list = list.filter( (item) => (contents[1] != item.name))
             }
@@ -370,8 +468,10 @@ class View
             columns[3].innerText = item.subtitle.font.name
             columns[4].innerText = item.subtitle.font.size
             columns[5].innerText = item.subtitle.color
-            columns[8].innerText = 'I'
-            columns[6].querySelectorAll('button')[1].addEventListener('click', (event) => { 
+            columns[7].innerText = item.picture
+
+            const rowButtons = columns[6].querySelectorAll('button')
+            rowButtons[1].addEventListener('click', (event) => { 
                 event.stopPropagation() 
 
                 const cell = ( event.target && event.target.parentElement.tagName == 'TD' ) ? event.target.parentElement : null
@@ -385,8 +485,7 @@ class View
                     detail  : [ parseInt(id.innerText) ]
                 }))
             })
-
-            columns[6].querySelectorAll('button')[0].addEventListener('click', (event) => { 
+            rowButtons[0].addEventListener('click', (event) => { 
                 event.stopPropagation() 
 
                 const cell = ( event.target && event.target.parentElement.tagName == 'TD' ) ? event.target.parentElement : null

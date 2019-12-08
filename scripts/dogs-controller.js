@@ -10,7 +10,7 @@ class Controller extends EventTarget
         this.private = {
 
             viewDogsInsert  : event => {
-                    model.dogInsert(event.detail)
+                    model.dogsInsert(event.detail)
                 },
 
             viewDogEdit     : event => {
@@ -32,7 +32,8 @@ class Controller extends EventTarget
             viewBreedImages : async (event) => {
                     try
                     {
-                        const url = 'https://dog.ceo/api/breed/' + event.detail.breed + '/images'
+                        const path = event.detail.breed.split(' ').reverse().join('/')
+                        const url = 'https://dog.ceo/api/breed/' + path + '/images'
 
                         const response = await fetch(url)
                         const urls     = await response.json()

@@ -4,6 +4,14 @@ HTML canvas drawImage() Method
 https://www.w3schools.com/tags/canvas_drawimage.asp
 
 
+default select option as blank
+https://stackoverflow.com/questions/8605516/default-select-option-as-blank
+
+
+Array.prototype.reverse()
+https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Global_Objects/Array/reverse
+
+
 How can I clear cache in Safari on my iOS device?
 https://help.fox.com/fox/s/article/How-can-I-clear-cache-on-my-iOS-device
 
