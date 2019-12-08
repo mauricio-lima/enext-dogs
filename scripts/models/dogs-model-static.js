@@ -28,7 +28,21 @@ class Model
                         size    :  43
                     } 
                 }
+            },
+            {
+                id       :  3,
+                name     : 'Ninja',
+                breed    : 'akita',
+                picture  : '',
+                subtitle : {
+                    color   : 'blue',
+                    font    : {
+                        name    : 'Arial',
+                        size    :  43
+                    } 
+                }
             }
+
         ]
     }
 
