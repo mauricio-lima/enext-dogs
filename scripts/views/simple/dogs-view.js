@@ -21,6 +21,9 @@ class View
 
         const insertDog = document.createElement('div')
         insertDog.innerHTML = `
+                <h3>
+                    Dogs Database
+                </h3>
                 <div id="edit" class="hidden">
                     <input id="id"   type="hidden">
                     <input id="url"  type="hidden">
@@ -52,14 +55,15 @@ class View
                     <div id="breed-image-section"  class="hidden">
                         <br>
                         <br>
+                        <button id="breed-image-previous">
+                            previous
+                        </button>
                         <canvas id="breed-image"></canvas>
+                        <button id="breed-image-next">
+                            next
+                        </button>
                         <div>
-                            <button id="breed-image-previous">
-                                previous
-                            </button>
-                            <button id="breed-image-next">
-                                next
-                            </button>
+                            cursor position
                         </div>
                     </div>
                     <br>
@@ -172,31 +176,7 @@ class View
             document.getElementById('main').classList.remove('hidden')
         })
 
-        insertDog.querySelector('#breed').addEventListener('change', (event) => {
-            this.requestBreedImages(event.target.value)
-        })
 
-        insertDog.querySelector('#breed-image-previous').addEventListener('click', () => {
-            this.breedImages.selected--
-            this.breedImages.show()
-        })
-
-        insertDog.querySelector('#breed-image-next').addEventListener('click', () => {
-            this.breedImages.selected++
-            this.breedImages.show()
-        })
-
-        insertDog.querySelector('#name').addEventListener('keyup', () => {
-            this.breedImages.show()
-        })
-
-        insertDog.querySelector('#font').addEventListener('change', () => {
-            this.breedImages.show()
-        })
-
-        insertDog.querySelector('#size').addEventListener('keyup', () => {
-            this.breedImages.show()
-        })
 
         insertDog.querySelector('#color').addEventListener('change', () => {
             this.breedImages.show()
@@ -204,6 +184,36 @@ class View
 
         insertDog.querySelector('#dogsClear').addEventListener('click', () => {
             application.controller.dispatchEvent(new CustomEvent('view-dogs-clear'))
+        })
+    }
+
+
+    initialize()
+    {
+        document.querySelector('#name').addEventListener('keyup', () => {
+            this.breedImages.show()
+        })
+
+        document.querySelector('#font').addEventListener('change', () => {
+            this.breedImages.show()
+        })
+
+        document.querySelector('#size').addEventListener('keyup', () => {
+            this.breedImages.show()
+        })
+
+        document.querySelector('#breed').addEventListener('change', (event) => {
+            this.requestBreedImages(event.target.value)
+        })
+
+        document.querySelector('#breed-image-previous').addEventListener('click', () => {
+            this.breedImages.selected--
+            this.breedImages.show()
+        })
+
+        document.querySelector('#breed-image-next').addEventListener('click', () => {
+            this.breedImages.selected++
+            this.breedImages.show()
         })
     }
 
@@ -219,10 +229,21 @@ class View
     }
 
 
-    drawImage(image)
+    requestDogsData(keys, callback)
     {
-        const canvas = document.getElementById('breed-image')
-        canvas.height = 200
+        application.controller.dispatchEvent(new CustomEvent('retrieve-dogs-data', {
+            bubbles : false, 
+            detail  : {
+                keys     : keys,
+                callback : callback
+            }
+        }))
+    }
+
+
+    drawImage(image, canvas, height = 200)
+    {
+        canvas.height = height
         canvas.width  = canvas.height / image.height * image.width
         
         const context = canvas.getContext('2d')
@@ -308,7 +329,7 @@ class View
                     })
                 }
 
-                this.drawImage(selectedImage.image)
+                this.drawImage(selectedImage.image, document.getElementById('breed-image'))
             }
         }
 
@@ -320,7 +341,7 @@ class View
     }
 
 
-    async dogEdit(adog)
+    async dogEdit(dogs)
     {
         let id
         let name
@@ -341,6 +362,7 @@ class View
         color = '#000000'
         pictureURL = ''
 
+        const adog = dogs.pop()
         if (adog)
         {
               id       = adog.id
@@ -382,7 +404,7 @@ class View
             selectedImage.onload = resolve
             selectedImage.src = pictureURL
         })
-        this.drawImage(selectedImage)
+        this.drawImage(selectedImage, document.getElementById('breed-image'))
     }
 
 
@@ -404,7 +426,7 @@ class View
 
     dogsUpdate(list)
     {
-        let columns
+        //let columns
 
         const dogsTable = document.querySelector('#dogs tbody')
         const dogRows = dogsTable.querySelectorAll('tr.dog')
@@ -458,9 +480,15 @@ class View
             const row = dogsTable.lastChild
             row.innerHTML = dogRows[0].innerHTML
             row.classList.remove('hidden')
-            row.addEventListener('click', () => alert('row clicked'))
+            row.addEventListener('click', (event) => {
+                const id = parseInt(event.target.parentElement.querySelector('td').innerText)
+                this.requestDogsData( [ id ], (data) => {
+                    if (!data.picture)
+                        return
+                })
+            })
 
-            columns = row.querySelectorAll('td')
+            const columns = row.querySelectorAll('td')
 
             columns[0].innerText = item.id
             columns[1].innerText = item.name
@@ -494,10 +522,16 @@ class View
                 if (!id)
                     return
 
-                application.controller.dispatchEvent(new CustomEvent('view-dog-edit', { 
+                this.requestDogsData([ parseInt(id.innerText) ], this.dogEdit)
+                /*
+                application.controller.dispatchEvent(new CustomEvent('retrie-dog-edit', { 
                     bubbles : false, 
-                    detail  : [ parseInt(id.innerText) ]
+                    detail  : {
+                        id       : [ parseInt(id.innerText) ],
+                        callback : this.dogEdit 
+                    }
                 }))
+                */
             })
         }
     }
