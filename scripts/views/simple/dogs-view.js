@@ -79,7 +79,7 @@ class View
                 <h3>
                     Dogs Database
                 </h3>
-                <div id="edit" class="hidden">
+                <div id="edit" class="hidden" style="text-align : center">
                     <input id="id"   type="hidden">
                     <input id="url"  type="hidden">
                     <label for="name">Name :</label>
@@ -136,7 +136,7 @@ class View
                     </button>
                     <span id="edit-error-name-empty" class="hidden">The name could not be empty</span>
                 </div>
-                <div id="main">
+                <div id="main" style="text-align : center">
                     <div class="toolbar">
                         <button id="dogsInsert">
                             Insert Dog
@@ -145,7 +145,7 @@ class View
                             Clear All
                         </button>
                     </div>
-                    <table id="dogs">
+                    <table id="dogs" style="margin-left:auto;margin-right:auto;">
                         <thead>
                             <tr>
                                 <th> id      </th>
