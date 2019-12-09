@@ -11,6 +11,11 @@ class View
         script.src = 'scripts/views/simple/handlers.js'
         head.appendChild(script)
 
+        const fonts = document.createElement('link')
+        fonts.rel  = 'stylesheet'
+        fonts.href = 'https://fonts.googleapis.com/css?family=Caveat|Lemon|Lilita+One|Monoton|Rock+Salt|Lobster|Limelight|Pacifico&display=swap'
+        head.appendChild(fonts)
+
         const styles = document.createElement('style')
         styles.type = 'text/css'
         styles.appendChild(document.createTextNode(`
@@ -85,8 +90,15 @@ class View
                     <br>
                     <label for="font">Font :</label>
                     <select id="font">
-                        <option value="Times New Roman">Times New Roman </option>
-                        <option value="Arial"          >Arial           </option>
+                        <option value="Caveat">Caveat</option>
+                        <option value="Lemon"      > Lemon      </option>
+                        <option value="Lilita One" > Lilita One </option>
+                        <option value="Monoton"    > Monoton    </option>
+                        <option value="Lobster"    > Lobster    </option>
+                        <option value="Limelight"  > Limelight  </option>
+                        <option value="Pacifico"   > Pacifico   </option>
+
+                        Caveat|Lemon|Lilita+One|Monoton|Rock+Salt|Lobster|Limelight|Pacifico
                     </select>
                     <br>
                     <label for="size">Size :</label>
