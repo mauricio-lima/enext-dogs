@@ -1,0 +1,15 @@
+[
+    {
+        "id"        :  1,
+        "breed"     : "akita",
+        "name"      : "Ninja",
+        "picture"   : "https://images.dog.ceo/breeds/akita/512px-Akita_inu.jpeg",
+        "subtitle"  : {
+            "color" : "#00ffff",
+            "font"  : {
+                "name" : "Caveat",
+                "size" :  0.2
+            }
+        }
+    }
+]

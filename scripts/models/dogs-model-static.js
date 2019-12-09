@@ -32,7 +32,7 @@ class Model
             }
         ]
 */
-        this.list = JSON.parse(localStorage.getItem('database'))
+        this.list = JSON.parse(localStorage.getItem('database')) || []
 /*
         this.list.push({
             id       :  3,
@@ -82,7 +82,7 @@ class Model
             }
         }))
         
-        //this.storageUpdate()
+        this.storageUpdate()
     }
 
 
@@ -137,6 +137,6 @@ class Model
             updates : this.list
         }}))
 
-        //this.storageUpdate()
+        this.storageUpdate()
     }
 }
