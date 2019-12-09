@@ -24,6 +24,11 @@ class View
         tag.href = 'https://fonts.googleapis.com/icon?family=Material+Icons'
         head.appendChild(tag)
 
+        const fonts = document.createElement('link')
+        fonts.rel  = 'stylesheet'
+        fonts.href = 'https://fonts.googleapis.com/css?family=Caveat|Lemon|Lilita+One|Monoton|Rock+Salt|Lobster|Limelight|Pacifico&display=swap'
+        head.appendChild(fonts)
+
         tag = document.createElement('script')
         tag.src = 'https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js'
         head.appendChild(tag)
@@ -98,9 +103,14 @@ class View
 					                <label class="col-sm-2 control-label">Font</label>
 					                <div class="col-sm-6">
 						                <select id="font" data-plugin-selectTwo class="form-control populate js-example-responsive" style="width: 100%;">
-							                <option value="Arial">Arial</option>
-							                <option value="Times New Roman">Times New Roman</option>
-						                </select>
+                                            <option value="Caveat">Caveat</option>
+                                            <option value="Lemon"      > Lemon      </option>
+                                            <option value="Lilita One" > Lilita One </option>
+                                            <option value="Monoton"    > Monoton    </option>
+                                            <option value="Lobster"    > Lobster    </option>
+                                            <option value="Limelight"  > Limelight  </option>
+                                            <option value="Pacifico"   > Pacifico   </option>
+                                        </select>
                                     </div>
                                     <label class="col-sm-1 control-label">Size</label>
 					                <div class="col-sm-2">
