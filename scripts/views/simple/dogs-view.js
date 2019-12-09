@@ -97,8 +97,6 @@ class View
                         <option value="Lobster"    > Lobster    </option>
                         <option value="Limelight"  > Limelight  </option>
                         <option value="Pacifico"   > Pacifico   </option>
-
-                        Caveat|Lemon|Lilita+One|Monoton|Rock+Salt|Lobster|Limelight|Pacifico
                     </select>
                     <br>
                     <label for="size">Size :</label>
