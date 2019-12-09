@@ -570,6 +570,7 @@ class View
         color = '#000000'
         pictureURL = ''
 
+        const adog = !!dogs ? dogs.pop() : dogs
         if (adog)
         {
               id       = adog.id
@@ -652,7 +653,7 @@ class View
                 columns.forEach( (column) => {
                     contents.push(column.innerText)
                 })
-                
+
                 const item = list.filter( (item) => {
                     return (contents[1] == item.name)
                 }).pop()
