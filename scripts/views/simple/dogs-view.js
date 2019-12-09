@@ -2,6 +2,9 @@ class View
 {
     constructor()
     {
+        this.DIALOG_IMAGE_HEIGHT = 200
+        this.TABLE_IMAGE_HEIGHT  = 300
+
         const head = document.getElementsByTagName('head')[0];
 
         const script = document.createElement('script')
@@ -118,8 +121,10 @@ class View
                             </tr>
                         </tbody>
                     </table>
-                    <canvas id="picture">
-                    </canvas>
+                    <div id="picture-container">
+                        <canvas id="picture">
+                        </canvas>
+                    </div>
                 </div>
                     `
 
@@ -146,6 +151,7 @@ class View
                 document.getElementById('url'  ).value = this.breedImages.images[this.breedImages.selected - 1].url
             }
 
+            debugger
             let adog = {
                 breed    : document.getElementById('breed').value,
                 name     : document.getElementById('name' ).value,
@@ -155,11 +161,12 @@ class View
                     color : document.getElementById('color').value,
                     font  : {
                         name : document.getElementById('font').value,
-                        size : parseInt(document.getElementById('size').value)
+                        size : parseInt(document.getElementById('size').value) / this.DIALOG_IMAGE_HEIGHT
                     }
                 }
             }
             
+            debugger
             const id = document.getElementById('id').value
             if (id)
             {
@@ -241,21 +248,20 @@ class View
     }
 
 
-    drawImage(image, canvas, height = 200)
+    drawImage(canvas, information, height = this.DIALOG_IMAGE_HEIGHT)
     {
         canvas.height = height
-        canvas.width  = canvas.height / image.height * image.width
+        canvas.width  = canvas.height / information.picture.height * information.picture.width
         
         const context = canvas.getContext('2d')
-        context.drawImage(image, 0, 0, canvas.width, canvas.height)
+        context.drawImage(information.picture, 0, 0, canvas.width, canvas.height)
 
-        const name = document.getElementById('name').value
-        if (name == '')
+        if (information.name == '')
             return
 
-        context.font = document.getElementById('size').value + 'px ' + document.getElementById('font').value
-        context.fillStyle = document.getElementById('color').value
-        context.fillText(name, 40, 40)
+        context.font      = (information.font.size * height) + 'px ' + information.font.name
+        context.fillStyle = information.color
+        context.fillText(information.name, information.position.horizontal * height, information.position.vertical * height)
     }
 
 
@@ -301,11 +307,10 @@ class View
                 const currentURL = document.getElementById('url').value
                 if (currentURL)
                 {
-                    self.selected = self.images.findIndex( item => self.images.url == currentURL )
+                    self.selected = self.images.findIndex( item => item.url == currentURL )
                     if ( !isNaN(self.selected ))
                     {
                         self.selected++
-                        return
                     }
                 }
 
@@ -322,14 +327,26 @@ class View
                 if (!selectedImage.image)
                 {
                     selectedImage.image  = new Image()
-                    //selectedImage.url = selectedImage.url  //.replace('https', 'http')
                     await new Promise ( (resolve) => {
                         selectedImage.image.onload = resolve
-                        selectedImage.image.src = selectedImage.url    
+                        selectedImage.image.src = selectedImage.url
                     })
                 }
 
-                this.drawImage(selectedImage.image, document.getElementById('breed-image'))
+                const information = {
+                    name    : document.getElementById('name').value,
+                    color   : document.getElementById('color').value,
+                    picture : selectedImage.image,
+                    font    : {
+                        name    : document.getElementById('font').value,
+                        size    : document.getElementById('size').value / this.DIALOG_IMAGE_HEIGHT
+                    },
+                    position : {
+                        horizontal : 40 / this.DIALOG_IMAGE_HEIGHT,
+                        vertical   : 40 / this.DIALOG_IMAGE_HEIGHT
+                    } 
+                }
+                this.drawImage(document.getElementById('breed-image'), information)
             }
         }
 
@@ -385,7 +402,12 @@ class View
             this.requestBreedImages(breed)
         }
 
-        document.getElementById('size').value = size 
+        const optionsFont = document.querySelectorAll('#font option[value=\'' + font + '\']')
+        if (optionsFont.length > 0)
+        {
+            optionsFont[0].selected = true
+        }
+        document.getElementById('size').value = parseInt(size * this.DIALOG_IMAGE_HEIGHT) 
         
         const optionsColor = document.querySelectorAll('#color option[value=\'' + color + '\']')
         if (optionsColor.length > 0)
@@ -404,7 +426,19 @@ class View
             selectedImage.onload = resolve
             selectedImage.src = pictureURL
         })
-        this.drawImage(selectedImage, document.getElementById('breed-image'))
+        this.drawImage(document.getElementById('breed-image'), {
+            name    : name,
+            color   : color,
+            picture : selectedImage,
+            font : {
+                name : font,
+                size : size
+            },
+            position : {
+                horizontal : 40 / this.DIALOG_IMAGE_HEIGHT,
+                vertical   : 40 / this.DIALOG_IMAGE_HEIGHT
+            }
+        })
     }
 
 
@@ -482,9 +516,37 @@ class View
             row.classList.remove('hidden')
             row.addEventListener('click', (event) => {
                 const id = parseInt(event.target.parentElement.querySelector('td').innerText)
-                this.requestDogsData( [ id ], (data) => {
-                    if (!data.picture)
+                this.requestDogsData( [ id ], async (data) => {
+                    const dog = data.pop()
+
+                    if ( (!dog) || (!dog.picture) )
+                    {
+                        document.getElementById('picture-container').classList.add('hidden')
                         return
+                    }
+                        
+
+                    const image = new Image()
+                    await new Promise ( (resolve) => {
+                        image.onload = resolve
+                        image.src    = dog.picture 
+                    })
+
+                    const information = {
+                        name     : dog.name,
+                        color    : dog.subtitle.color,
+                        picture  : image,
+                        font     : {
+                            name : dog.subtitle.font.name,
+                            size : dog.subtitle.font.size
+                        },
+                        position : {
+                            horizontal : 40 / this.DIALOG_IMAGE_HEIGHT,
+                            vertical   : 40 / this.DIALOG_IMAGE_HEIGHT
+                        }
+                    }
+                    this.drawImage(document.getElementById('picture'), information, this.TABLE_IMAGE_HEIGHT)
+                    document.getElementById('picture-container').classList.remove('hidden')
                 })
             })
 
