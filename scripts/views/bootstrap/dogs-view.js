@@ -421,7 +421,7 @@ class View
         })
 
         $('#dogsInsert').on('click', () => {
-            alert('Insert')
+            //alert('Insert')
         })
     }
 
@@ -674,7 +674,7 @@ class View
                         return
                     }
 
-                    alert('other rows')
+                    //alert('other rows')
             })
 
             for(let item of list)

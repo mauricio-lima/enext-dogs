@@ -1,8 +1,4 @@
 ( () => {
-    function DOMLoaded()
-    {
-        alert('DOM Loaded')
-    }
 
     window.application = {
         ...window.application,
@@ -11,8 +7,6 @@
             
         }
     }
-
-    //document.addEventListener('DOMContentLoaded', DOMLoaded)
 
     application.controller.run()
 })()
