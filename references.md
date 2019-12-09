@@ -33,6 +33,14 @@ Javascript ES6/ES5 find in array and change
 https://stackoverflow.com/questions/35206125/javascript-es6-es5-find-in-array-and-change
 
 
+Function.prototype.bind()
+https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Global_Objects/Function/bind
+
+
+Changing The Execution Context Of JavaScript Functions Using Call() And Apply()
+https://www.bennadel.com/blog/2265-changing-the-execution-context-of-javascript-functions-using-call-and-apply.htm
+
+
 How can I clear cache in Safari on my iOS device?
 https://help.fox.com/fox/s/article/How-can-I-clear-cache-on-my-iOS-device
 

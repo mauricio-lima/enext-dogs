@@ -81,7 +81,7 @@ class View
                 </div>
                 <div id="main">
                     <div>
-                        <button id="dogInsert">
+                        <button id="dogsInsert">
                             Insert Dog
                          </button>
                         <button id="dogsClear">
@@ -130,7 +130,7 @@ class View
 
         container.appendChild(insertDog)
 
-        insertDog.querySelector('#dogInsert').addEventListener('click', () => {
+        insertDog.querySelector('#dogsInsert').addEventListener('click', () => {
             this.dogEdit()
         })
 
@@ -151,7 +151,6 @@ class View
                 document.getElementById('url'  ).value = this.breedImages.images[this.breedImages.selected - 1].url
             }
 
-            debugger
             let adog = {
                 breed    : document.getElementById('breed').value,
                 name     : document.getElementById('name' ).value,
@@ -166,7 +165,6 @@ class View
                 }
             }
             
-            debugger
             const id = document.getElementById('id').value
             if (id)
             {
@@ -379,7 +377,7 @@ class View
         color = '#000000'
         pictureURL = ''
 
-        const adog = dogs.pop()
+        const adog = !!dogs ? dogs.pop() : dogs
         if (adog)
         {
               id       = adog.id
@@ -466,7 +464,6 @@ class View
         const dogRows = dogsTable.querySelectorAll('tr.dog')
 
         dogRows.forEach( (row, index) => {
-            let status
             const updateColumn = (index, value) => {
                 if (contents[index] != value)
                 {
@@ -477,34 +474,33 @@ class View
             if (index == 0)
                 return
                 
-            const columns = row.querySelectorAll('td')
-            
             const contents = []
+            const columns  = row.querySelectorAll('td')
             columns.forEach( (column) => {
                 contents.push(column.innerText)
             })
-            if (contents.length > 1)
+            if (contents.length < 2)
+                return
+
+            const item = list.filter( (item) => {
+                //return (contents[1] == item.name)
+                return (contents[0] == item.id)
+            }).pop()
+
+            if (!item)
             {
-                const item = list.filter( (item) => {
-                    return (contents[1] == item.name)
-                }).pop()
-
-                if (!item)
-                {
-                    dogsTable.removeChild(row)
-                    return
-                }
-
-                updateColumn(1, item.name)
-                updateColumn(2, item.breed)
-                updateColumn(3, item.subtitle.font.name)
-                updateColumn(4, item.subtitle.font.size)
-                updateColumn(5, item.subtitle.color)
-                updateColumn(7, item.picture)
-
-                list = list.filter( (item) => (contents[1] != item.name))
+                dogsTable.removeChild(row)
+                return
             }
-            
+
+            updateColumn(1, item.name)
+            updateColumn(2, item.breed)
+            updateColumn(3, item.subtitle.font.name)
+            updateColumn(4, item.subtitle.font.size)
+            updateColumn(5, item.subtitle.color)
+            updateColumn(7, item.picture)
+
+            list = list.filter( (item) => (contents[0] != item.id))
         })
 
         for(let item of list)
@@ -525,7 +521,6 @@ class View
                         return
                     }
                         
-
                     const image = new Image()
                     await new Promise ( (resolve) => {
                         image.onload = resolve

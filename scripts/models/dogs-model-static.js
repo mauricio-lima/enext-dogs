@@ -72,6 +72,8 @@ class Model
 
     dogsClear()
     {
+        debugger
+
         this.list = []
         application.controller.dispatchEvent(new CustomEvent('model-dogs-update', {
             bubbles : false, 
@@ -80,7 +82,7 @@ class Model
             }
         }))
         
-        this.storageUpdate()
+        //this.storageUpdate()
     }
 
 
@@ -135,6 +137,6 @@ class Model
             updates : this.list
         }}))
 
-        this.storageUpdate()
+        //this.storageUpdate()
     }
 }
