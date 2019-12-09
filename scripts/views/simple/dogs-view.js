@@ -14,9 +14,56 @@ class View
         const styles = document.createElement('style')
         styles.type = 'text/css'
         styles.appendChild(document.createTextNode(`
+            html
+            {
+                font-family : Helvetica;
+                font-size   : 14px;
+            }
+
             .hidden {
                 display : none;
-            }`
+            }
+
+            label {
+                width      : 55px;
+                text-align : right;
+                display    : inline-block;
+            }
+
+            input, select {
+                margin-bottom : 4px;
+            }
+
+            .toolbar {
+                padding-bottom : 5px;
+            }
+
+            .toolbar button {
+                width   : 86px;
+                padding : 4px;
+            }
+
+            table {
+                border-collapse: collapse;
+            }
+              
+            table, th, td {
+                border: 1px solid black;
+            }
+
+            th, td {
+                padding : 5px;
+            }
+
+            td button {
+                width : 55px;
+            }
+
+            #picture-container {
+                padding-top : 15px;
+                text-align  : center;
+            }
+            `
             ))
         head.appendChild(styles)
 
@@ -80,7 +127,7 @@ class View
                     <span id="edit-error-name-empty" class="hidden">The name could not be empty</span>
                 </div>
                 <div id="main">
-                    <div>
+                    <div class="toolbar">
                         <button id="dogsInsert">
                             Insert Dog
                          </button>
