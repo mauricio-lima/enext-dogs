@@ -63,13 +63,26 @@ class Controller extends EventTarget
     }
 
 
+    urlParametersParser() {
+        window.location.parameters = {};
+        window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, 
+            (m, key, value) => window.location.parameters[key] = value);
+    }
+
+
+    parameters(name)
+    {
+        return window.location.parameters[name]
+    }
+
+
     async run()
     {
+        this.urlParametersParser()
+
         this.view.initialize()
         this.model.dogsList()
 
-        //return // remover para avançar
-        
         try
         {
             const response = await fetch('https://dog.ceo/api/breeds/list/all')

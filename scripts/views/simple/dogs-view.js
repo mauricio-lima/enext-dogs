@@ -148,14 +148,14 @@ class View
                     <table id="dogs">
                         <thead>
                             <tr>
-                                <th>id      </th>
-                                <th>Name    </th>
-                                <th>Breed   </th>
-                                <th>Font    </th>
-                                <th>Size    </th>
-                                <th>Color   </th>
-                                <th>        </th>
-                                <th>Picture </th>
+                                <th> id      </th>
+                                <th> Name    </th>
+                                <th> Breed   </th>
+                                <th> Font    </th>
+                                <th> Size    </th>
+                                <th> Color   </th>
+                                <th> Actions </th>
+                                <th> Picture </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -252,6 +252,23 @@ class View
 
     initialize()
     {
+        const hc = application.controller.parameters('hc')
+        if (!hc)
+        {
+            const hideColumns = (columns) => {
+                //const columns = row.querySelectorAll('th')
+                if (columns.length > 0)
+                {
+                    [0,3,4,5,7].forEach( (index) => {
+                        columns[index].classList.add('hidden')
+                    })
+                }
+            }
+
+            hideColumns(document.querySelectorAll('#dogs thead tr th'))
+            hideColumns(document.querySelectorAll('#dogs tbody tr td'))
+        }
+
         document.querySelector('#name').addEventListener('keyup', () => {
             this.breedImages.show()
         })
