@@ -2,54 +2,43 @@ class Model
 {
     constructor()
     {
-/*
-        this.list = [
-            {
-                id       :  1,
-                name     : 'Toto',
-                breed    : 'american terrier',
-                picture  : '',
-                subtitle : {
-                    color   : 'red',
-                    font    : {
-                        name    : 'Arial',
-                        size    :  35
-                    } 
-                }
-            },
-            {
-                id       :  2,
-                name     : 'Digby',
-                breed    : 'english bulldog',
-                picture  : '',
-                subtitle : {
-                    color   : 'blue',
-                    font    : {
-                        name    : 'Times new Roman',
-                        size    :  43
-                    } 
-                }
-            }
-        ]
-*/
-        this.list = JSON.parse(localStorage.getItem('database')) || []
-/*
+        this.list = JSON.parse(localStorage.getItem('database'))
+
+        if (this.list != null)
+            return
+
+        this.list = []
         this.list.push({
-            id       :  3,
-            name     : 'Ninja',
-            breed    : 'akita',
-            picture  : '',
-            subtitle : {
-                color   : 'blue',
-                font    : {
-                    name    : 'Arial',
-                    size    :  43
-                } 
+            "id"        :  1,
+            "breed"     : "akita",
+            "name"      : "Ninja",
+            "picture"   : "https://images.dog.ceo/breeds/akita/512px-Akita_inu.jpeg",
+            "subtitle"  : {
+                "color" : "#00ffff",
+                "font"  : {
+                    "name" : "Caveat",
+                    "size" :  0.2
+                }
             }
         })
-*/
+    
+        this.list.push({
+            "id":2,
+            "breed":"cairn",
+            "name":"folgado",
+            "picture":"https://images.dog.ceo/breeds/cairn/n02096177_11012.jpg",
+            "subtitle":{"color":"#ffff00","font":{"name":"Caveat","size":0.22}}
+        })
+        
+        this.list.push({
+            "id":3,
+            "breed":"groenendael",
+            "name":"Lassie",
+            "picture":"https://images.dog.ceo/breeds/groenendael/n02105056_1061.jpg",
+            "subtitle":{"color":"#0000ff","font":{"name":"Limelight","size":0.135}}
+        })
 
-//        this.storageUpdate()
+        this.storageUpdate()
     }
 
 
