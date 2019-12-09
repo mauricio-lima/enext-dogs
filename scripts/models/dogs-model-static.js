@@ -2,6 +2,7 @@ class Model
 {
     constructor()
     {
+/*
         this.list = [
             {
                 id       :  1,
@@ -28,22 +29,33 @@ class Model
                         size    :  43
                     } 
                 }
-            },
-            {
-                id       :  3,
-                name     : 'Ninja',
-                breed    : 'akita',
-                picture  : '',
-                subtitle : {
-                    color   : 'blue',
-                    font    : {
-                        name    : 'Arial',
-                        size    :  43
-                    } 
-                }
             }
-
         ]
+*/
+        this.list = JSON.parse(localStorage.getItem('database'))
+/*
+        this.list.push({
+            id       :  3,
+            name     : 'Ninja',
+            breed    : 'akita',
+            picture  : '',
+            subtitle : {
+                color   : 'blue',
+                font    : {
+                    name    : 'Arial',
+                    size    :  43
+                } 
+            }
+        })
+*/
+
+//        this.storageUpdate()
+    }
+
+
+    storageUpdate()
+    {
+        localStorage.setItem('database', JSON.stringify(this.list))
     }
 
 
@@ -67,6 +79,8 @@ class Model
                 updates : []
             }
         }))
+        
+        this.storageUpdate()
     }
 
 
@@ -79,6 +93,7 @@ class Model
     dogsDelete(keys)
     {
         this.list = this.list.filter( (item) => !keys.includes(item.id) )
+        this.storageUpdate()
         this.dogsList()
     }
 
@@ -119,5 +134,7 @@ class Model
         application.controller.dispatchEvent(new CustomEvent('model-dogs-update', { bubbles : false, detail : {
             updates : this.list
         }}))
+
+        this.storageUpdate()
     }
 }
