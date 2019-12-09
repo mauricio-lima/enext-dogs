@@ -559,7 +559,7 @@ class View
     }
 
 
-    async dogEdit(adog)
+    async dogEdit(dogs)
     {
         let id
         let name
